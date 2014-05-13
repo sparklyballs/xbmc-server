@@ -201,6 +201,12 @@ AC_ARG_ENABLE([shared-lib],
   [build_shared_lib=$enableval],
   [build_shared_lib=no])
 
+AC_ARG_ENABLE([headless],
+  [AS_HELP_STRING([--enable-headless],
+  [build xbmc server (default is no)])],
+  [build_headless=$enableval],
+  [build_headless=no])
+
 AC_ARG_ENABLE([debug],
   [AS_HELP_STRING([--enable-debug],
   [enable debugging information (default is yes)])],
@@ -776,6 +782,11 @@ fi
 if test "$build_shared_lib" = "yes"; then
   final_message="$final_message\n Shared lib\tYes"
   AC_SUBST(USE_LIBXBMC,1)
+fi
+
+if test "$build_headless" = "yes"; then
+  final_message="$final_message\n Headless\tYes"
+  AC_SUBST(USE_HEADLESS,1)
 fi
 
 
