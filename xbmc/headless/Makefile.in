@@ -1,0 +1,8 @@
+.SUFFIXES : .m .mm
+
+SRCS  = server.cpp scan.cpp
+
+LIB=server.a scan.a
+
+include @abs_top_srcdir@/Makefile.include
+-include $(patsubst %.mm,%.P,$(patsubst %.cpp,%.P,$(patsubst %.c,%.P,$(SRCS))))

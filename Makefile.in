@@ -286,7 +286,7 @@ DISTCLEAN_FILES=config.h config.log config.status tools/Linux/xbmc.sh \
         system/libcpluff-@ARCH@.so
 
 ifeq (@USE_HEADLESS@,1)
-FINAL_TARGETS+=xbmc-server xbmcVideoLibraryScan
+FINAL_TARGETS+=xbmc-server.bin xbmc-scan.bin
 else
 ifeq (@USE_LIBXBMC@,1)
 FINAL_TARGETS+=libxbmc.so
@@ -560,8 +560,14 @@ else
 	$(SILENT_LD) $(CC) $(CFLAGS) $(LDFLAGS) -o xbmc-xrandr xbmc-xrandr.c -lXrandr -lX11 -lm
 endif
 
-xbmc-server.bin xbmc-scan.bin: libxbmc.so
-	$(SILENT_LD) $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ xbmc/xbmc-server.cpp xbmc/AppParamParser.o xbmc/XbmcContext.o -Wl,--start-group $(DYNOBJSXBMC) $(OBJSXBMC) -Wl,--end-group
+xbmc/headless: force
+	$(MAKE) -C xbmc/headless
+
+xbmc-server.bin: libxbmc.so xbmc/headless
+	$(SILENT_LD) $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ xbmc/headless/server.a xbmc/AppParamParser.o xbmc/XbmcContext.o $(LIBS)
+
+xbmc-scan.bin: libxbmc.so xbmc/headless
+	$(SILENT_LD) $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ xbmc/headless/scan.a xbmc/AppParamParser.o xbmc/XbmcContext.o $(LIBS)
 
 tools/TexturePacker/TexturePacker: xbmc/guilib/XBTF.h
 	$(MAKE) -C tools/TexturePacker/
