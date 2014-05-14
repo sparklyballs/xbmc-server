@@ -779,16 +779,36 @@ else
   SDL_DEFINES="$SDL_DEFINES -D'GIT_REV=\"$GIT_REV\"'"
 fi
 
+if test "$build_headless" = "yes"; then
+  final_message="$final_message\n Headless\tYes"
+  AC_SUBST(USE_HEADLESS,1)
+  build_shared_lib=yes
+  use_alsa=no
+  use_crystalhd=no
+  use_fishbmc=no
+  #use_gl=no
+  use_gles=no
+  use_goom=no
+  use_joystick=no
+  use_openmax=no
+  use_projectm=no
+  use_pulse=no
+  use_rsxs=no
+  #use_sdl=no
+  use_spectrum=no
+  use_vaapi=no
+  use_vdpau=no
+  use_vtbdecoder=no
+  use_waveform=no
+  use_wayland=no
+  #use_x11=no
+  use_xrandr=no
+fi
+
 if test "$build_shared_lib" = "yes"; then
   final_message="$final_message\n Shared lib\tYes"
   AC_SUBST(USE_LIBXBMC,1)
 fi
-
-if test "$build_headless" = "yes"; then
-  final_message="$final_message\n Headless\tYes"
-  AC_SUBST(USE_HEADLESS,1)
-fi
-
 
 # platform debug flags
 if test "$use_debug" = "yes"; then
