@@ -564,10 +564,10 @@ xbmc/headless: force
 	$(MAKE) -C xbmc/headless
 
 xbmc-server.bin: libxbmc.so xbmc/headless
-	$(SILENT_LD) $(CXX) $(LDFLAGS) -o $@ xbmc/headless/server.o xbmc/AppParamParser.o xbmc/XbmcContext.o -lxbmc
+	$(SILENT_LD) $(CXX) $(LDFLAGS) -o $@ xbmc/headless/server.o xbmc/AppParamParser.o xbmc/XbmcContext.o -lxbmc -L.
 
 xbmc-scan.bin: libxbmc.so xbmc/headless
-	$(SILENT_LD) $(CXX) $(LDFLAGS) -o $@ xbmc/headless/scan.o xbmc/AppParamParser.o xbmc/XbmcContext.o -lxbmc
+	$(SILENT_LD) $(CXX) $(LDFLAGS) -o $@ xbmc/headless/scan.o xbmc/AppParamParser.o xbmc/XbmcContext.o -lxbmc -L.
 
 tools/TexturePacker/TexturePacker: xbmc/guilib/XBTF.h
 	$(MAKE) -C tools/TexturePacker/
