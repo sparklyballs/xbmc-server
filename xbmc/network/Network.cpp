@@ -212,15 +212,7 @@ bool CNetwork::HasInterfaceForIP(unsigned long address)
 
 bool CNetwork::IsAvailable(bool wait /*= false*/)
 {
-  if (wait)
-  {
-    // NOTE: Not implemented in linuxport branch as 99.9% of the time
-    //       we have the network setup already.  Trunk code has a busy
-    //       wait for 5 seconds here.
-  }
-
-  std::vector<CNetworkInterface*>& ifaces = GetInterfaceList();
-  return (ifaces.size() != 0);
+  return true;
 }
 
 bool CNetwork::IsConnected()
