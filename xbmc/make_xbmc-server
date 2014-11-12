@@ -2,7 +2,7 @@ include ../Makefile.include
 
 SOURCES := xbmc-server.cpp
 
-LFLAGS += -lxbmc -lstdc++ -L..
+LFLAGS += -L.. -lxbmc -lstdc++
 
 #INCLUDES += -I.
 
