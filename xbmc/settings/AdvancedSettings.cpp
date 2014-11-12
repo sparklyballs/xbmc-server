@@ -1373,3 +1373,8 @@ void CAdvancedSettings::SetExtraLogsFromAddon(ADDON::IAddon* addon)
   }
   CLog::SetExtraLogLevels(m_extraLogLevels);
 }
+
+CAdvancedSettings& GetAdvancedSettings()
+{
+  return g_advancedSettings;
+}

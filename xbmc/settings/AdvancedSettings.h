@@ -410,3 +410,5 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
 };
 
 XBMC_GLOBAL(CAdvancedSettings,g_advancedSettings);
+
+CAdvancedSettings& GetAdvancedSettings();

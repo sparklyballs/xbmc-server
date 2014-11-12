@@ -53,9 +53,9 @@ int main(int argc, char* argv[])
 
   //this can't be set from CAdvancedSettings::Initialize() because it will overwrite
   //the loglevel set with the --debug flag
-  g_advancedSettings.m_logLevel     = LOG_LEVEL_DEBUG;
-  g_advancedSettings.m_logLevelHint = LOG_LEVEL_DEBUG;
-  CLog::SetLogLevel(g_advancedSettings.m_logLevel);
+  GetAdvancedSettings().m_logLevel     = LOG_LEVEL_DEBUG;
+  GetAdvancedSettings().m_logLevelHint = LOG_LEVEL_DEBUG;
+  CLog::SetLogLevel(GetAdvancedSettings().m_logLevel);
 
 #ifdef _LINUX
   // Prevent child processes from becoming zombies on exit if not waited upon. See also Util::Command
@@ -67,27 +67,27 @@ int main(int argc, char* argv[])
   sigaction(SIGCHLD, &sa, NULL);
 #endif
   setlocale(LC_NUMERIC, "C");
-  g_advancedSettings.Initialize();
+  GetAdvancedSettings().Initialize();
 
 #ifndef _WIN32
   CAppParamParser appParamParser;
   appParamParser.Parse((const char **)argv, argc);
 #endif
 
-  if (!g_advancedSettings.Initialized())
+  if (!GetAdvancedSettings().Initialized())
   {
-    g_advancedSettings.m_logLevel     = LOG_LEVEL_DEBUG;
-    g_advancedSettings.m_logLevelHint = LOG_LEVEL_DEBUG;
-    g_advancedSettings.Initialize();
+    GetAdvancedSettings().m_logLevel     = LOG_LEVEL_DEBUG;
+    GetAdvancedSettings().m_logLevelHint = LOG_LEVEL_DEBUG;
+    GetAdvancedSettings().Initialize();
   }
 
-  if (!g_application.Create())
+  if (!GetApplicationInstance().Create())
   {
     fprintf(stderr, "ERROR: Unable to create application. Exiting\n");
     return -1;
   }
 
-  if (!g_application.Initialize())
+  if (!GetApplicationInstance().Initialize())
   {
     fprintf(stderr, "ERROR: Unable to Initialize. Exiting\n");
     return -1;
@@ -106,22 +106,22 @@ int main(int argc, char* argv[])
   printf("Starting Video Library Scan\n\n");
 
   // Start scanning the Video Library for changes...
-  g_application.StartVideoScan("");
+  GetApplicationInstance().StartVideoScan("");
 
   // Run xbmc
-  while (!g_application.m_bStop)
+  while (!GetApplicationInstance().m_bStop)
   {
     //-----------------------------------------
     // Animate and render a frame
     //-----------------------------------------
     lastFrameTime = XbmcThreads::SystemClockMillis();
-    g_application.Process();
+    GetApplicationInstance().Process();
 
     // Frame move the scene
-    if (!g_application.m_bStop) g_application.FrameMove(true, false);
+    if (!GetApplicationInstance().m_bStop) GetApplicationInstance().FrameMove(true, false);
 
     // If scanning the Video Library has finished then ask XBMC to quit...
-    if (!g_application.IsVideoScanning()) 
+    if (!GetApplicationInstance().IsVideoScanning()) 
     {
        CApplicationMessenger::Get().Quit();
     } else {
@@ -136,9 +136,9 @@ int main(int argc, char* argv[])
 
   CLog::Log(LOGNOTICE, "Finished Video Library Scan..." );
 
-  m_ExitCode = g_application.m_ExitCode;
+  m_ExitCode = GetApplicationInstance().m_ExitCode;
 
-  g_application.Destroy();
+  GetApplicationInstance().Destroy();
 
   printf("\n\nFinished Video Library Scan...\n");
 

@@ -55,9 +55,9 @@ int main(int argc, char* argv[])
 
   //this can't be set from CAdvancedSettings::Initialize() because it will overwrite
   //the loglevel set with the --debug flag
-  g_advancedSettings.m_logLevel     = LOG_LEVEL_NORMAL;
-  g_advancedSettings.m_logLevelHint = LOG_LEVEL_NORMAL;
-  CLog::SetLogLevel(g_advancedSettings.m_logLevel);
+  GetAdvancedSettings().m_logLevel     = LOG_LEVEL_NORMAL;
+  GetAdvancedSettings().m_logLevelHint = LOG_LEVEL_NORMAL;
+  CLog::SetLogLevel(GetAdvancedSettings().m_logLevel);
 
   CLog::Log(LOGNOTICE, "Starting XBMC Server..." );
 
@@ -75,38 +75,38 @@ int main(int argc, char* argv[])
   sigaction(SIGCHLD, &sa, NULL);
 #endif
   setlocale(LC_NUMERIC, "C");
-  g_advancedSettings.Initialize();
+  GetAdvancedSettings().Initialize();
 
-  if (!g_advancedSettings.Initialized())
-    g_advancedSettings.Initialize();
+  if (!GetAdvancedSettings().Initialized())
+    GetAdvancedSettings().Initialize();
 
 #ifndef _WIN32
   CAppParamParser appParamParser;
   appParamParser.Parse((const char **)argv, argc);
 #endif
-  if (!g_application.Create())
+  if (!GetApplicationInstance().Create())
   {
     fprintf(stderr, "ERROR: Unable to create application. Exiting\n");
     return -1;
   }
-  if (!g_application.Initialize())
+  if (!GetApplicationInstance().Initialize())
   {
     fprintf(stderr, "ERROR: Unable to Initialize. Exiting\n");
     return -1;
   }
 
   // Start scanning the Video Library for changes...
-  g_application.StartVideoScan("");
+  GetApplicationInstance().StartVideoScan("");
 
   // Run xbmc
-  while (!g_application.m_bStop)
+  while (!GetApplicationInstance().m_bStop)
   {
     //-----------------------------------------
     // Animate and render a frame
     //-----------------------------------------
     try
     {
-      g_application.Process();
+      GetApplicationInstance().Process();
       //reset exception count
       processExceptionCount = 0;
 
@@ -124,19 +124,19 @@ int main(int argc, char* argv[])
     }
 
     // If scanning the Video Library has finished then ask XBMC to quit...
-  //  if (!g_application.IsVideoScanning()) g_application.getApplicationMessenger().Quit();
+  //  if (!GetApplicationInstance().IsVideoScanning()) GetApplicationInstance().getApplicationMessenger().Quit();
 
     // Sleep for a little bit so we don't hog the CPU...
 
     Sleep(50);
     // printf(".");
-  } // !g_application.m_bStop
+  } // !GetApplicationInstance().m_bStop
 
-  g_application.Destroy();
+  GetApplicationInstance().Destroy();
 
   printf("\n\nExiting XBMC Server...\n");
 
   CLog::Log(LOGNOTICE, "Exiting XBMC Server..." );
 
-  return g_application.m_ExitCode;
+  return GetApplicationInstance().m_ExitCode;
 }

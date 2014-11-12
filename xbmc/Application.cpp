@@ -5861,3 +5861,8 @@ void CApplication::CloseNetworkShares()
   CSFTPSessionManager::DisconnectAllSessions();
 #endif
 }
+
+CApplication& GetApplicationInstance()
+{
+  return g_application;
+}
